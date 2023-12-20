@@ -1,0 +1,21 @@
+.image__pelicula{
+    width: 100px;
+}
+.td__peli{
+    height: 165px;
+}
+
+/*Estilos para el formulario de enviar correos electronicos del usuario */
+.form_control{
+    border:1px solid red;
+    color: red;
+    outline:none;
+    font-size:1.1rem;
+
+}
+.form_control:valid{
+    border:1px solid green;
+    color: green;
+    outline:none;
+    font-size:1.1rem;
+}
