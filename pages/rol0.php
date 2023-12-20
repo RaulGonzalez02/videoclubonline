@@ -32,28 +32,41 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 0) {
     <body>
         <!--INICIO CONTAINER-->
         <div class="container border mt-2">
-            <h1 class='text-center'>Bienvenido <?php echo ucfirst($_SESSION['user']); ?></h1>
+            <h1 class='text-center'>Bienvenido <?php echo substr(ucfirst($_SESSION['user']), 0, -1); ?></h1>
             <?php
+            //Si la cookie esta inicializada
             if (isset($_COOKIE[$cookieName])) {
+                //Mostramos el contenido de la cookie
                 echo "<p>Su ultima conexion fue " . htmlspecialchars($_COOKIE[$cookieName]) . "</p>";
-            } else {
+            }
+            //Si no esta inicializada la creamos y mostramos un mensaje
+            else {
                 echo "Bienvenido por primera vez";
                 setcookie($cookieName, $timeN, time() + 10 * 24 * 60 * 60);
             }
+            //Llamamos a la funcion selectPeliculas()
             $selectPeliculas = selectPeliculas();
+            //Llamamos a la funcion selectActores()
             $selectActores = selectActores();
             //echo count($peliculas);
+            // Verifica si no hay elementos en $selectPeliculas y $selectActores
             if (count($selectPeliculas) == 0 && count($selectActores) == 0) {
                 echo "<p>No hay niguna pelicula</p>";
             } else {
                 $peliculas = [];
                 $actores = [];
+                //Recorremos el array que nos devolvio la funcion selectPeliculas()
                 for ($i = 0; $i < count($selectPeliculas); $i++) {
+                    //Creamos el objeto Pelicula
                     $pelicula = new Pelicula($selectPeliculas[$i]["id"], $selectPeliculas[$i]["titulo"], $selectPeliculas[$i]["genero"], $selectPeliculas[$i]["pais"], $selectPeliculas[$i]["anyo"], $selectPeliculas[$i]["cartel"]);
+                    //Guadamos los objetos creados en un array
                     array_push($peliculas, $pelicula);
                 }
+                //Recorremos el array que nos devolvio la funcion selectActores()
                 for ($i = 0; $i < count($selectActores); $i++) {
+                    //Creamos el objeto Actores
                     $actor = new Actor($selectActores[$i]["id"], $selectActores[$i]["nombre"], $selectActores[$i]["apellidos"], $selectActores[$i]["fotografia"]);
+                    //Guardamos los objetos creados en un array
                     array_push($actores, $actor);
                 }
             }
@@ -89,13 +102,17 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 0) {
                 <label class="form-label">Incidencia</label>
                 <textarea class="form_control form-control" name="mensaje" rows="15" cols="10" placeholder="Escriba aqui su incendicia" minlength="5"></textarea>
                 <?php
+                //Si la variable error esta inicializada.
                 if (isset($_GET['error'])) {
+                    //Si esta inicializada a 1 mostramos un error de que los campos estan sin completar.
                     if (htmlspecialchars($_GET['error']) == 1) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error: Complete todos los campos</p>";
                     }
+                    //Si esta inicializada a 2 mostramos un error de que no se pudo enviar el correo electronico correctamente
                     if (htmlspecialchars($_GET['error']) == 2) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error: No se pudo enviar el correo intentelo de nuevo</p>";
                     }
+                    //Si esta inicializada en 0 mostramos un mensaje de que el envio fue correctamente
                     if (htmlspecialchars($_GET['error']) == 0) {
                         echo "<p class='mt-2 p-1 text-success bg-success-subtle rounded'>Envio correctamente</p>";
                     }

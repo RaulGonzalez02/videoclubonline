@@ -5,11 +5,12 @@ include '../lib/model/Actor.php';
 include '../lib/model/Pelicula.php';
 include '../lib/model/Usuario.php';
 
+//Comprobamos que existe la session[user] y que la session[rol] es 0, que lo que quiere decir que son los usuarios normales.
 if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
     //echo "Usuario admin contraseña password_admin";
-    $timeN= date("d/m/Y");
+    $timeN = date("d/m/Y");
     //Para que el nombre de la cookie no sea descriptivo le metemos un hash
-    $cookieName= hash("sha256", $_SESSION['user']);
+    $cookieName = hash("sha256", $_SESSION['user']);
 } else {
     header("Location:../index.php?error=1");
 }
@@ -31,29 +32,41 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
     <body>
         <!--INICIO CONTAINER-->
         <div class="container-fluid p-3 border mt-2">
-            <h1 class='text-center'>Bienvenido <?php echo ucfirst($_SESSION['user']); ?></h1>
+            <h1 class='text-center'>Bienvenido <?php echo substr(ucfirst($_SESSION['user']), 0, -1); ?></h1>
             <?php
-          if (isset($_COOKIE[$cookieName])) {
-                echo "<p>Su ulitma conexion fue ".htmlspecialchars($_COOKIE[$cookieName])."</p>";
-               
-            } else {
+            //Si la cookie esta inicializada, mostramos un mesaje de su contenido
+            if (isset($_COOKIE[$cookieName])) {
+                echo "<p>Su ulitma conexion fue " . htmlspecialchars($_COOKIE[$cookieName]) . "</p>";
+            }
+            //Si no esta inicializada la creamos y mostramos un mensaje
+            else {
                 echo "Bienvenido por primera vez";
                 setcookie($cookieName, $timeN, time() + 10 * 24 * 60 * 60);
             }
+
+            //Llamamos a la funcion selectPeliculas()
             $selectPeliculas = selectPeliculas();
+            //Llamamos a la funcion selectActores()
             $selectActores = selectActores();
             //echo count($peliculas);
+            // Verifica si no hay elementos en $selectPeliculas y $selectActores
             if (count($selectPeliculas) == 0 && count($selectActores) == 0) {
                 echo "<p>No hay niguna pelicula</p>";
             } else {
                 $peliculas = [];
                 $actores = [];
+                //Recorremos el array que nos devolvio la funcion selectPeliculas()
                 for ($i = 0; $i < count($selectPeliculas); $i++) {
+                    //Creamos el objeto Pelicula
                     $pelicula = new Pelicula($selectPeliculas[$i]["id"], $selectPeliculas[$i]["titulo"], $selectPeliculas[$i]["genero"], $selectPeliculas[$i]["pais"], $selectPeliculas[$i]["anyo"], $selectPeliculas[$i]["cartel"]);
+                    //Guadamos los objetos creados en un array
                     array_push($peliculas, $pelicula);
                 }
+                //Recorremos el array que nos devolvio la funcion selectActores()
                 for ($i = 0; $i < count($selectActores); $i++) {
+                    //Creamos el objeto Actores
                     $actor = new Actor($selectActores[$i]["id"], $selectActores[$i]["nombre"], $selectActores[$i]["apellidos"], $selectActores[$i]["fotografia"]);
+                    //Guardamos los objetos creados en un array
                     array_push($actores, $actor);
                 }
             }
@@ -75,9 +88,30 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                             $actorPelicula = $actorPelicula . " " . $actor . ",";
                         }
                     }
-                    echo "<td><img class='image__pelicula' alt='" . trim($pelicula->getCartel()) . "' src='../assets/images/" . $pelicula->getCartel() . "'>";
-                    echo "<td class='d-flex td__peli'>" . $pelicula . "<div class='text-end d-flex gap-1 p-2'>  <a href=''><i class='fa-solid fa-pen  bg-info p-2 rounded text-info-emphasis fs-5'></i></a>" .
-                    "\t<a href=''><i class='fa-solid fa-x  bg-danger p-2 rounded text-danger-emphasis fs-5'></i></a></div></td>";
+                    echo '<td><img class="image__pelicula" alt="' . trim($pelicula->getCartel()) . '" src="../assets/images/' . $pelicula->getCartel() . '"></td>';
+                    echo '<td class="d-flex td__peli">' . $pelicula . '<div class="text-end d-flex gap-1 p-2 h-50">'
+                    . '<button class="bg-info p-2 rounded text-info-emphasis fs-5"><i class="fa-solid fa-pen  "></i></button>'
+                    . '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalEliminar'.$pelicula->getId().'"><i class="fa-solid fa-x" ></i></button>'
+                    . '</div>'
+                    //Creamos un modal para cada una de las peliculas
+                    . '<!-- Modal Eliminar -->
+                        <div class="modal fade" id="exampleModalEliminar'.$pelicula->getId().'" tabindex="-1" aria-labelledby="exampleModalEliminar'.$pelicula->getId().'" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalEliminarTitulo'.$pelicula->getId().'">Eliminar</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">¿Seguro que quieres eliminar la pelicula '.
+                                        $pelicula->getTitulo()
+                                    .'? Si deseas eliminar pulse aceptar, si no cancelar</div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                                        <a href="" class="btn btn-danger">Aceptar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></td>';
                     echo "<td>" . $actorPelicula . "</td>";
                     echo "</tr>";
                 }
@@ -91,20 +125,25 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                 <label class="form-label ms-2">Genero</label>
                 <input class="form-control w-50 ms-2" type="text" name="genero">
                 <label class="form-label ms-2">Año</label>
-                <input class="form-control w-50 ms-2" type="anyo" name="anyo">
+                <input class="form-control w-50 ms-2" type="text" name="anyo">
                 <label class="form-label ms-2">Pais</label>
-                <input class="form-control w-50 ms-2" type="pais" name="pais">
+                <input class="form-control w-50 ms-2" type="text" name="pais">
                 <?php
+                //Si la variable error esta inicializada.
                 if (isset($_GET['error'])) {
+                    //Si esta inicializada a 1 mostramos un error de que los campos estan sin completar.
                     if (htmlspecialchars($_GET['error']) == 1) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error: Complete todos los campos</p>";
                     }
+                    //Si esta inicializada a 2 mostramos un error de que la pelicula ya esta añadida
                     if (htmlspecialchars($_GET['error']) == 2) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error: Pelicula ya añadida</p>";
                     }
+                    //Si esta inicializada a 3 mostramos un mensaje de error que la inserccion no se ha podido completar
                     if (htmlspecialchars($_GET['error']) == 3) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error en la insercción, prueba más tarde</p>";
                     }
+                    //Si esta inicializada en 0 mostramos un mensaje de que la inserccion fue correctamente
                     if (htmlspecialchars($_GET['error']) == 0) {
                         echo "<p class='mt-2 p-1 text-success bg-success-subtle rounded'>Pelicula añadida correctamente</p>";
                     }
