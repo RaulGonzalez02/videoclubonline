@@ -6,7 +6,7 @@
 }
 
 /*Estilos para el formulario de enviar correos electronicos del usuario */
-.form_control{
+.form_control:invalid{
     border:1px solid red;
     color: red;
     outline:none;

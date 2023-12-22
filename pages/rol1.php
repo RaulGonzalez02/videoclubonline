@@ -91,23 +91,23 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                     echo '<td><img class="image__pelicula" alt="' . trim($pelicula->getCartel()) . '" src="../assets/images/' . $pelicula->getCartel() . '"></td>';
                     echo '<td class="d-flex td__peli">' . $pelicula . '<div class="text-end d-flex gap-1 p-2 h-50">'
                     . '<button class="bg-info p-2 rounded text-info-emphasis fs-5"><i class="fa-solid fa-pen  "></i></button>'
-                    . '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalEliminar'.$pelicula->getId().'"><i class="fa-solid fa-x" ></i></button>'
+                    . '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalEliminar' . $pelicula->getId() . '"><i class="fa-solid fa-x" ></i></button>'
                     . '</div>'
                     //Creamos un modal para cada una de las peliculas
                     . '<!-- Modal Eliminar -->
-                        <div class="modal fade" id="exampleModalEliminar'.$pelicula->getId().'" tabindex="-1" aria-labelledby="exampleModalEliminar'.$pelicula->getId().'" aria-hidden="true">
+                        <div class="modal fade" id="exampleModalEliminar' . $pelicula->getId() . '" tabindex="-1" aria-labelledby="exampleModalEliminar' . $pelicula->getId() . '" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalEliminarTitulo'.$pelicula->getId().'">Eliminar</h1>
+                                        <h1 class="modal-title fs-5" id="exampleModalEliminarTitulo' . $pelicula->getId() . '">Eliminar</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body">¿Seguro que quieres eliminar la pelicula '.
-                                        $pelicula->getTitulo()
-                                    .'? Si deseas eliminar pulse aceptar, si no cancelar</div>
+                                    <div class="modal-body">¿Seguro que quieres eliminar la pelicula ' .
+                    $pelicula->getTitulo()
+                    . '? Si deseas eliminar pulse aceptar, si no cancelar</div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
-                                        <a href="" class="btn btn-danger">Aceptar</a>
+                                        <a href="./eliminarPelicula.php?id=' . $pelicula->getId() . '" class="btn btn-danger">Aceptar</a>
                                     </div>
                                 </div>
                             </div>
@@ -117,6 +117,18 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                 }
                 ?>
             </table>
+            <?php
+            if (isset($_GET['errorE'])) {
+                //Si esta inicializada a 2 mostramos un mensaje de error que la eliminación no se ha podido completar
+                if (htmlspecialchars($_GET['errorE']) == 2) {
+                    echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error en la eliminación, prueba más tarde</p>";
+                }
+                //Si esta inicializada en 0 mostramos un mensaje de que la eliminación fue correctamente
+                if (htmlspecialchars($_GET['errorE']) == 0) {
+                    echo "<p class='mt-2 p-1 text-success bg-success-subtle rounded'>Pelicula eliminada correctamente</p>";
+                }
+            }
+            ?>
             <!--INICIO FORMULARIO PARA AÑADIR PELICULA-->
             <form action="./aniadirPelicula.php" method="post" class="form border mt-4 p-1 d-flex flex-column align-items-center">
                 <h3 class="text-center">AÑADIR PELICULA</h3>
@@ -130,21 +142,21 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                 <input class="form-control w-50 ms-2" type="text" name="pais">
                 <?php
                 //Si la variable error esta inicializada.
-                if (isset($_GET['error'])) {
+                if (isset($_GET['errorA'])) {
                     //Si esta inicializada a 1 mostramos un error de que los campos estan sin completar.
-                    if (htmlspecialchars($_GET['error']) == 1) {
+                    if (htmlspecialchars($_GET['errorA']) == 1) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error: Complete todos los campos</p>";
                     }
                     //Si esta inicializada a 2 mostramos un error de que la pelicula ya esta añadida
-                    if (htmlspecialchars($_GET['error']) == 2) {
+                    if (htmlspecialchars($_GET['errorA']) == 2) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error: Pelicula ya añadida</p>";
                     }
                     //Si esta inicializada a 3 mostramos un mensaje de error que la inserccion no se ha podido completar
-                    if (htmlspecialchars($_GET['error']) == 3) {
+                    if (htmlspecialchars($_GET['errorA']) == 3) {
                         echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error en la insercción, prueba más tarde</p>";
                     }
                     //Si esta inicializada en 0 mostramos un mensaje de que la inserccion fue correctamente
-                    if (htmlspecialchars($_GET['error']) == 0) {
+                    if (htmlspecialchars($_GET['errorA']) == 0) {
                         echo "<p class='mt-2 p-1 text-success bg-success-subtle rounded'>Pelicula añadida correctamente</p>";
                     }
                 }

@@ -86,9 +86,32 @@ function insertPelicula($titulo, $genero, $anyo, $pais, $cartel) {
     $prepare = $bd->prepare("insert into peliculas values(id, :titulo, :genero, :pais, :anyo, :cartel)");
     if (!$prepare->execute(array(":titulo" => $titulo, ":genero" => $genero, ":pais" => $pais, ":anyo" => $anyo, ":cartel" => $cartel))) {
         $bd = null;
-        header("Location:./rol1.php?error=3");
+        header("Location:./rol1.php?errorA=3");
     } else {
         $bd = null;
-        header("Location:./rol1.php?error=0");
+        header("Location:./rol1.php?errorA=0");
+    }
+}
+
+function eliminarActuan($id) {
+    $bd = conexionBD();
+    $prepare = $bd->prepare('delete from actuan where idPelicula=:id');
+    if (!$prepare->execute(array(":id" => $id))) {
+        $bd = null;
+        header('Location:./rol1.php?errorE=2');
+    } else {
+        $bd = null;
+    }
+}
+
+function eliminarPelicula($id) {
+    $bd = conexionBD();
+    $prepare = $bd->prepare('delete from peliculas where id=:id');
+    if (!$prepare->execute(array(":id" => $id))) {
+        $bd = null;
+        header('Location:./rol1.php?errorE=2');
+    } else {
+        $bd = null;
+        header("Location:./rol1.php?errorE=0");
     }
 }
