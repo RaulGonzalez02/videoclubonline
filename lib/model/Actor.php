@@ -1,12 +1,45 @@
 <?php
 
+/**
+ * Clase Actor
+ */
 class Actor {
 
+    /**
+     * Propiedad id
+     * Id del actor
+     * @var integer
+     */
     private $id;
+    
+    /**
+     * Propiedad nombre
+     * Nombre del actor
+     * @var string
+     */
     private $nombre;
+    
+    /**
+     * Propiedad apellidos
+     * Apellidos del actor
+     * @var string
+     */
     private $apellidos;
+    
+    /**
+     * Propiedad fotografia
+     * Fotografia del actor
+     * @var string
+     */
     private $fotografía;
 
+    /**
+     * Constructor de la clase actor
+     * @param integer $id
+     * @param string $nombre
+     * @param string $apellidos
+     * @param string $fotografia
+     */
     public function __construct($id, $nombre, $apellidos, $fotografia) {
         $this->id = $id;
         $this->nombre = $nombre;
@@ -46,6 +79,10 @@ class Actor {
         $this->fotografía = $fotografía;
     }
 
+    /**
+     * __toString de la clase actor
+     * @return string
+     */
     public function __toString() {
         return $this->getNombre() . " " . $this->getApellidos();
     }

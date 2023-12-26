@@ -7,8 +7,11 @@ require '../PHPMailer-master/src/Exception.php';
 require '../PHPMailer-master/src/PHPMailer.php';
 require '../PHPMailer-master/src/SMTP.php';
 session_start();
+//Si la session user esta inicializada y la session rol es 0
 if (isset($_SESSION['user']) && $_SESSION['rol'] == 0) {
+    //Si la longitud del array de POST es diferente a 0
     if (count($_POST) != 0) {
+        //Si todas las variables de de POST estan inicializadas a algo diferente de ""
         if (htmlspecialchars($_POST['email'] != "") && htmlspecialchars($_POST['mensaje']) != "") {
             //echo "Todos los campos completos";
             $email = htmlspecialchars($_POST['email']);
@@ -39,7 +42,7 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 0) {
 
                 $mail->isHTML(true); //El mensaje enviado es HTML
 
-                $mail->Subject = "Incidencias del usuario: " . substr($_SESSION['user'], 0, -1)." con el mail ".$email; //Asunto del mensaje
+                $mail->Subject = "Incidencias del usuario: " . substr($_SESSION['user'], 0, -1) . " con el mail " . $email; //Asunto del mensaje
                 $mail->Body = $body; //Cuerpo del mensaje
 
 
@@ -61,12 +64,18 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 0) {
             } catch (Exception $exc) {
                 header("Location:./rol0.php?error=2");
             }
-        } else {
+        }
+        //Si no redireccionamos a la pagina rol0.php y mostramos un error
+        else {
             header("Location:./rol0.php?error=1");
         }
-    } else {
+    }
+    //Si no redireccionamos a la pagina rol0.php y mostramos un error
+    else {
         header("Location:./rol0.php?error=1");
     }
-} else {
+}
+//Si no redireccionamos a la pagina rol0.php y mostramos un error
+else {
     header("Location:../index.php?error=1");
 }

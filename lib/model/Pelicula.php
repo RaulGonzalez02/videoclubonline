@@ -1,14 +1,60 @@
 <?php
-
+/**
+ * Clase Pelicula
+ */
 class Pelicula {
 
+    /**
+     * Propiedad id
+     * Id de la pelicula
+     * @var integer
+     */
     private $id;
+    
+    /**
+     * Propiedad titulo
+     * Titulo de la pelicula
+     * @var string
+     */
     private $titulo;
+    
+    /**
+     * Propiedad genero
+     * Genero de la pelicula
+     * @var string
+     */
     private $genero;
+    
+    /**
+     * Propiedad pais
+     * Pais de la pelicula
+     * @var string
+     */
     private $pais;
+    
+    /**
+     * Propiedad anyo
+     * Anyo de la pelicula
+     * @var integer
+     */
     private $anyo;
+    
+    /**
+     * Propiedad cartel
+     * Cartel de la pelicula
+     * @var string
+     */
     private $cartel;
 
+    /**
+     * Constructor de la clase usuario
+     * @param integer $id
+     * @param string $titulo
+     * @param string $genero
+     * @param string $pais
+     * @param integer $anyo
+     * @param string $cartel
+     */
     function __construct($id, $titulo, $genero, $pais, $anyo, $cartel) {
         $this->id = $id;
         $this->titulo = $titulo;
@@ -66,6 +112,10 @@ class Pelicula {
         $this->cartel = $cartel;
     }
 
+    /**
+     * __toString de la clase pelicula
+     * @return string
+     */
     function __toString() {
         return "La pelicula es: "
                 . $this->getTitulo() . ", del genero " . $this->getGenero()

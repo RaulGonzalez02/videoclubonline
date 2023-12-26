@@ -1,12 +1,43 @@
 <?php
-
+/**
+ * CLASE USUARIO
+ */
 class Usuario{
-    
+    /**
+     * Propiedad id
+     * Id de usuario
+     * @var integer
+     */
     private $id;
+    
+    /**
+     * Propiedad username
+     * Nombre de usuario
+     * @var string
+     */
     private $username;
+    
+    /**
+     * Propiedad password
+     * Password del usuario
+     * @var string
+     */
     private $password;
+    
+    /**
+     * Propiedad rol
+     * Rol del usuario
+     * @var integer
+     */
     private $rol;
     
+    /**
+     * Constructor de la clase Usuario
+     * @param integer $id
+     * @param string $username
+     * @param string $password
+     * @param integer $rol
+     */
     function __construct($id, $username, $password, $rol) {
         $this->id=$id;
         $this->username=$username;
@@ -45,7 +76,11 @@ class Usuario{
     public function setRol($rol): void {
         $this->rol = $rol;
     }
-
+    
+    /**
+     * __toString de la clase usuario
+     * @return string
+     */
     function __toString() {
         return $this->getUsername()." con el rol ".$this->getRol();
     }

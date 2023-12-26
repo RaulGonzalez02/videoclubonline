@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Funcion que nos devuelve una conexión a la base de datos.
+ * @return \PDO
+ */
 function conexionBD() {
     $cadena_conexion = 'mysql:dbname=videoclubonline;host=127.0.0.1';
     $usuario = 'root';
@@ -13,6 +17,12 @@ function conexionBD() {
     }
 }
 
+/**
+ * Funcion verifica si el usuario que intento acceder esta registrado en la base de datos
+ * @param string $user username del usuario
+ * @param string $pass password del usuario
+ * @return type
+ */
 function selectLogin($user, $pass) {
     $bd = conexionBD();
     $prepare = $bd->prepare("select id, username, trim(password), rol from usuarios where username=:user and password=:pass");
@@ -26,6 +36,10 @@ function selectLogin($user, $pass) {
     }
 }
 
+/**
+ * Funcion que devuelve un array con todas las peliculas si la consulta a la tabla peliculas se ejecuta correctamente, si no devuelve -1
+ * @return array
+ */
 function selectPeliculas() {
     $bd = conexionBD();
     $prepare = $bd->prepare("select id, titulo, genero, pais, anyo, cartel from peliculas");
@@ -41,6 +55,10 @@ function selectPeliculas() {
     }
 }
 
+/**
+ * Funcion que devuelve un array con todos los actores si la consulta a la tabla actores se ejecuta correctamente, si no devuelve -1
+ * @return array
+ */
 function selectActores() {
     $bd = conexionBD();
     $prepare = $bd->prepare("select id, nombre, apellidos, fotografia from actores");
@@ -54,6 +72,12 @@ function selectActores() {
     }
 }
 
+/**
+ * Funcion que comprueba si un actor esta relacionado con una pelicula en la tabla actuan, devolviendo verdadero si lo estan y falso si no lo estan
+ * @param integer $idPelicula id de la pelicula
+ * @param integer $idActor id del actor
+ * @return bool
+ */
 function selectActuan($idPelicula, $idActor) {
     $bd = conexionBD();
     $prepare = $bd->prepare("select idPelicula, idActor from actuan where idPelicula=:idPelicula and idActor=:idActor");
@@ -67,6 +91,13 @@ function selectActuan($idPelicula, $idActor) {
     }
 }
 
+/**
+ * Funcion que comprueba si la pelicula existe en la base de datos
+ * @param string $titulo titulo de la pelicula que vamos comprobar
+ * @param string $genero genero de la pelicula que vamos a comprobar
+ * @param integer $anyo año de la pelicula que vamos a comprobar
+ * @return bool
+ */
 function comprobarPelicula($titulo, $genero, $anyo) {
     $bd = conexionBD();
     $prepare = $bd->prepare("select id from peliculas where titulo=:titulo and genero=:genero and anyo=:anyo");
@@ -80,6 +111,14 @@ function comprobarPelicula($titulo, $genero, $anyo) {
     }
 }
 
+/**
+ * Funcion que añade una nueva pelicula en la base de datos.
+ * @param string $titulo titulo de la pelicula que vamos añadir 
+ * @param string $genero genero de la pelicula que vamos añadir
+ * @param integer $anyo año de la pelicula que vamos añadir
+ * @param string $pais pais de la pelicula que vamos añadir
+ * @param string $cartel cartel de la pelicula que vamos añadir
+ */
 function insertPelicula($titulo, $genero, $anyo, $pais, $cartel) {
     $bd = conexionBD();
     $prepare = $bd->prepare("insert into peliculas values(id, :titulo, :genero, :pais, :anyo, :cartel)");
@@ -92,6 +131,10 @@ function insertPelicula($titulo, $genero, $anyo, $pais, $cartel) {
     }
 }
 
+/**
+ * Funcion que elimina de la tabla actuan las relaciones de la pelicula cuyo ID es proporcionado a la funcion para en un futuro eliminar dicha pelicula de la base de datos
+ * @param type $id id de la pelicula que vamos eliminar de la tabla
+ */
 function eliminarActuan($id) {
     $bd = conexionBD();
     $prepare = $bd->prepare('delete from actuan where idPelicula=:id');
@@ -103,6 +146,10 @@ function eliminarActuan($id) {
     }
 }
 
+/**
+ * Funcion que elimina la pelicula de la base de datos atraves del id de la pelicula
+ * @param integer $id de la pelicula que vamos eliminar
+ */
 function eliminarPelicula($id) {
     $bd = conexionBD();
     $prepare = $bd->prepare('delete from peliculas where id=:id');
@@ -115,6 +162,14 @@ function eliminarPelicula($id) {
     }
 }
 
+/**
+ * Funcion que hace un update en la base de datos, la cual modifica los campos atraves del id de la pelicula
+ * @param string $titulo titulo de la pelicula
+ * @param string $genero genero de la pelicula
+ * @param integer $anyo anyo de la pelicula
+ * @param string $pais pais de la pelicula
+ * @param integer $id id de la pelicula
+ */
 function updatePeliculas($titulo, $genero, $anyo, $pais, $id) {
     $bd = conexionBD();
     $prepare = $bd->prepare('update peliculas set titulo=:titulo, genero=:genero, anyo=:anyo, pais=:pais where id=:id');
