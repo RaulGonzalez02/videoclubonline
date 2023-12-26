@@ -15,7 +15,6 @@ function conexionBD() {
 
 function selectLogin($user, $pass) {
     $bd = conexionBD();
-    //********************************MIRAR SI QUE PASA CUANDO DESCONECTAMOS LA BASE DE DATOS***************************************
     $prepare = $bd->prepare("select id, username, trim(password), rol from usuarios where username=:user and password=:pass");
     $prepare->execute(array(":user" => $user, ":pass" => $pass));
     $fila = $prepare->fetch(PDO::FETCH_ASSOC);
@@ -113,5 +112,17 @@ function eliminarPelicula($id) {
     } else {
         $bd = null;
         header("Location:./rol1.php?errorE=0");
+    }
+}
+
+function updatePeliculas($titulo, $genero, $anyo, $pais, $id) {
+    $bd = conexionBD();
+    $prepare = $bd->prepare('update peliculas set titulo=:titulo, genero=:genero, anyo=:anyo, pais=:pais where id=:id');
+    if (!$prepare->execute(array(":titulo" => $titulo, ":genero" => $genero, ":anyo" => $anyo, ":pais" => $pais, ":id" => $id))) {
+        $bd = null;
+        header('Location:./rol1.php?errorU=2');
+    } else {
+        $bd = null;
+        header("Location:./rol1.php?errorU=0");
     }
 }

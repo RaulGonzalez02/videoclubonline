@@ -90,10 +90,10 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                     }
                     echo '<td><img class="image__pelicula" alt="' . trim($pelicula->getCartel()) . '" src="../assets/images/' . $pelicula->getCartel() . '"></td>';
                     echo '<td class="d-flex td__peli">' . $pelicula . '<div class="text-end d-flex gap-1 p-2 h-50">'
-                    . '<button class="bg-info p-2 rounded text-info-emphasis fs-5"><i class="fa-solid fa-pen  "></i></button>'
+                    . '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalActualizar' . $pelicula->getId() . '"><i class="fa-solid fa-pen"></i></button>'
                     . '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalEliminar' . $pelicula->getId() . '"><i class="fa-solid fa-x" ></i></button>'
                     . '</div>'
-                    //Creamos un modal para cada una de las peliculas
+                    //Creamos un modal para eliminar cada una de las peliculas
                     . '<!-- Modal Eliminar -->
                         <div class="modal fade" id="exampleModalEliminar' . $pelicula->getId() . '" tabindex="-1" aria-labelledby="exampleModalEliminar' . $pelicula->getId() . '" aria-hidden="true">
                             <div class="modal-dialog">
@@ -108,6 +108,34 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
                                         <a href="./eliminarPelicula.php?id=' . $pelicula->getId() . '" class="btn btn-danger">Aceptar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>'
+                    . '<!-- Modal Actualizar -->
+                        <div class="modal fade" id="exampleModalActualizar' . $pelicula->getId() . '" tabindex="-1" aria-labelledby="exampleModalActualizar' . $pelicula->getId() . '" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalActualizarTitulo' . $pelicula->getId() . '">Actualizar Pelicula</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <form action="./modificarPelicula.php" method="post" class="form border mt-4 p-1 d-flex flex-column align-items-center">
+                                        <label class="form-label ms-2">Titulo</label>
+                                        <input class="form-control w-50 ms-2" type="text" name="titulo" value="' . $pelicula->getTitulo() . '">
+                                        <label class="form-label ms-2">Genero</label>
+                                        <input class="form-control w-50 ms-2" type="text" name="genero" value="' . $pelicula->getGenero() . '">
+                                        <label class="form-label ms-2">Año</label>
+                                        <input class="form-control w-50 ms-2" type="text" name="anyo" value="' . $pelicula->getAnyo() . '">
+                                        <label class="form-label ms-2">Pais</label>
+                                        <input class="form-control w-50 ms-2" type="text" name="pais" value="' . $pelicula->getPais() . '">
+                                        <input hidden name="id" value="' . $pelicula->getId() . '">
+                                        <button type="submit" class="btn btn-primary">Aceptar</a>
+                                    </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                     </div>
                                 </div>
                             </div>
@@ -126,6 +154,20 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                 //Si esta inicializada en 0 mostramos un mensaje de que la eliminación fue correctamente
                 if (htmlspecialchars($_GET['errorE']) == 0) {
                     echo "<p class='mt-2 p-1 text-success bg-success-subtle rounded'>Pelicula eliminada correctamente</p>";
+                }
+            }
+            if (isset($_GET['errorU'])) {
+                //Si esta inicializada a 1 mostramos un mensaje de error que faltan campos por completar
+                if (htmlspecialchars($_GET['errorU']) == 1) {
+                    echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error: complete todos los campos para modificar una pelicula</p>";
+                }
+                //Si esta inicializada a 2 mostramos un mensaje de error que la modificación no se ha podido completar
+                if (htmlspecialchars($_GET['errorU']) == 2) {
+                    echo "<p class='mt-2 p-1 text-danger bg-danger-subtle rounded'>Error en la modificación, prueba más tarde</p>";
+                }
+                //Si esta inicializada en 0 mostramos un mensaje de que la modificación fue correctamente
+                if (htmlspecialchars($_GET['errorU']) == 0) {
+                    echo "<p class='mt-2 p-1 text-success bg-success-subtle rounded'>Pelicula modificada correctamente</p>";
                 }
             }
             ?>

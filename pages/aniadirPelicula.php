@@ -19,16 +19,16 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                 insertPelicula($titulo, $genero, $anyo, $pais, $cartel);
                 
             } else {
-                header("Location:./rol1.php?error=2");
+                header("Location:./rol1.php?errorA=2");
             }
         } else {
-            header("Location:./rol1.php?error=1");
+            header("Location:./rol1.php?errorA=1");
         }
     } else {
-        header("Location:./rol1.php?error=1");
+        header("Location:./rol1.php?errorA=1");
     }
 } else {
-    header("Location:../index.php?error=1");
+    header("Location:../index.php?errorA=1");
 }
 
 
