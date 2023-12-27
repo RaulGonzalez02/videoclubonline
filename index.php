@@ -20,7 +20,7 @@ session_start();
             <form method="post" action="./pages/login.php">
                 <div class="mb-3">
                     <label class="form-label">Usuario</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="user" placeholder="Usuario">
+                    <input type="text" class="form-control" id="exampleInputEmail1" name="user" placeholder="Usuario">
                 </div>
                 <div class="mb-3">
                     <label  class="form-label">Contraseña</label>

@@ -24,7 +24,7 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
         <!--Link para utilizar las clases de bootstrap-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-        <link rel="stylesheet" href="../css/styles.css"/>
+        <link rel="stylesheet" href="../css/styles.css">
     </head>
     <!--FIN HEAD-->
 
@@ -131,7 +131,7 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 1) {
                                         <label class="form-label ms-2">Pais</label>
                                         <input class="form-control w-50 ms-2" type="text" name="pais" value="' . $pelicula->getPais() . '">
                                         <input hidden name="id" value="' . $pelicula->getId() . '">
-                                        <button type="submit" class="btn btn-primary">Aceptar</a>
+                                        <button type="submit" class="btn btn-primary">Aceptar</button>
                                     </form>
                                     </div>
                                     <div class="modal-footer">
