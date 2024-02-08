@@ -31,14 +31,14 @@ if (isset($_SESSION['user']) && $_SESSION['rol'] == 0) {
                 $mail->SMTPAuth = true; //Autentificación activada
 
 
-                $mail->Username = 'videoclubgonzalez@gmail.com'; //Tu gmail
-                $mail->Password = 'imnnyfzmlhibgthe'; //Tu contraseña de aplicación de gamil
+                $mail->Username = ''; //Tu gmail
+                $mail->Password = ''; //Tu contraseña de aplicación de gamil
                 $mail->SMTPSecure = 'ssl'; //Tipo de seguridad
                 $mail->Port = 465; //Puerto de smtp
 
-                $mail->setFrom('videoclubgonzalez@gmail.com'); //Gmail desde el que se envía el mensaje
+                $mail->setFrom(''); //Gmail desde el que se envía el mensaje
 
-                $mail->addAddress('videoclubgonzalez@gmail.com'); //El email que recibe el correo
+                $mail->addAddress(''); //El email que recibe el correo
 
                 $mail->isHTML(true); //El mensaje enviado es HTML
 
